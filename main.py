@@ -127,7 +127,7 @@ async def hi(ctx):
       name=ctx.author.name,
       icon_url=ctx.author.avatar.url)  # Use avatar.url instead of avatar_url
   embed.add_field(name="About me",
-                  value="https://xtzzz-aboutme.onrender.com/",
+                  value="https://xt1z.github.io/xtzzz-aboutme/",
                   inline=False)
   embed.add_field(name="Objective for this bot",
                   value="help our community",
