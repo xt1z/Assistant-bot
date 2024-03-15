@@ -8,6 +8,8 @@ import ffmpeg
 import json
 from discord.ext import commands
 from discord import Activity, ActivityType
+from keep_alive import keep_alive
+keep_alive()
 # Retrieve bot token from environment variable
 TOKEN = os.environ.get('TOKEN')
 
