@@ -3,3 +3,4 @@ flask
 pytube
 discord.py
 ffmpeg
+pynacl
