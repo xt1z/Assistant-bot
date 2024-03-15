@@ -1,3 +1,5 @@
 aiogram==2.23.1
 flask
 pytube
+discord.py
+ffmpeg
