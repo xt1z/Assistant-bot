@@ -14,8 +14,8 @@ keep_alive()
 TOKEN = os.environ.get('TOKEN')
 
 # Replace 'channel_id_here' with the ID of the channel where you want the bot to respond
-CHANNEL_ID = '1218137617883856918'
-HOMEWORK_ID = '1218137486530969660'
+CHANNEL_ID = '1241258662237044777'
+HOMEWORK_ID = '1241258296392945666'
 
 # Define the intents
 intents = discord.Intents.all()
