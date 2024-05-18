@@ -75,17 +75,18 @@ async def add_homework(ctx, subject: str, *, assignment: str):
 
 @bot.command()
 async def list_homework(ctx):
-  # Check if the command was sent in the specified channel
-  if str(ctx.channel.id) != HOMEWORK_ID:
-    return
+    # Check if the command was sent in the specified channel
+    if str(ctx.channel.id) != HOMEWORK_ID:
+        return
 
-  # List all homework assignments
-  if homework_tracker:
-    for subject, assignments in homework_tracker.items():
-      await ctx.send(f'📑**{subject.capitalize()} Homework:**\n' +
-                     '\n'.join(assignments))
-  else:
-    await ctx.send('No homework assignments tracked.')
+    # List all homework assignments
+    if homework_tracker:
+        for subject, assignments in homework_tracker.items():
+            await ctx.send(f'📒**{subject.capitalize()}:**\n\n' +  # Adding an extra line break here
+                           '\n'.join(assignments))
+    else:
+        await ctx.send('No homework assignments tracked.')
+
 
 
 @bot.command()
@@ -120,16 +121,16 @@ async def hi(ctx):
 
   # Create an embed message
   embed = discord.Embed(
-      title="Hello I'm the Assistant bot for SSRU-M6 Community Server!!!",
+      title="Hello I'm the Assistant bot👻",
       description="this bot made by @__xtzzz",
       color=discord.Color.blue())
   embed.set_author(
       name=ctx.author.name,
       icon_url=ctx.author.avatar.url)  # Use avatar.url instead of avatar_url
-  embed.add_field(name="About me",
-                  value="https://xt1z.github.io/xtzzz-aboutme/",
+  embed.add_field(name="「👀」About me",
+                  value="https://xt1z.github.io/araiwa/",
                   inline=False)
-  embed.add_field(name="Objective for this bot",
+  embed.add_field(name="「📌」Objective for this bot",
                   value="help our community",
                   inline=True)
   embed.set_footer(text="© 2024 __xtzzz's")
@@ -179,21 +180,15 @@ async def ban(ctx, member: discord.Member, *, reason=None):
 
 
 @bot.command()
-async def hello(ctx):
+async def version(ctx):
   # Check if the command was sent in the specified channel
   if str(ctx.channel.id) != CHANNEL_ID:
     return
 
   # Create an embed message
-  embed = discord.Embed(title="🤓 Assistant xtz!",
-                        description="this bot made by @__xtzzz",
-                        color=discord.Color.blue())
-  embed.set_author(name=ctx.author.name,
-                   icon_url=ctx.author.avatar.url
-                   if ctx.author.avatar else discord.Embed.Empty)
-  embed.add_field(name="version 1.0.0", value="", inline=False)
-  embed.add_field(name="🤖", value="", inline=True)
-  embed.set_footer(text="© 2024 __xtzzz's")
+  embed = discord.Embed(title="Version 1.2.0",
+                      description="this bot made by @__xtzzz",
+                      color=discord.Color.blue())
 
   # Send the embed message
   await ctx.send(embed=embed)
@@ -207,7 +202,7 @@ async def ssru(ctx):
 
   # Create an embed message
   embed = discord.Embed(title="SSRU Website & Facebook!",
-                        description="this bot made by @__xtzzz",
+                        description="-----",
                         color=discord.Color.blue())
   embed.set_author(
       name=ctx.author.name,
