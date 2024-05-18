@@ -43,7 +43,7 @@ homework_tracker = load_homework()
 async def on_ready():
     print(f'We have logged in as {bot.user}')
     activity = Activity(type=ActivityType.playing,
-                        name="Helping SSRU Community Server")
+                        name="Skibidi toilet")
     await bot.change_presence(activity=activity)
 
 @bot.command()
@@ -85,7 +85,7 @@ async def hi(ctx):
     if str(ctx.channel.id) != CHANNEL_ID:
         return
     embed = discord.Embed(
-        title="Hello I'm the Assistant bot👻",
+        title="Hello I'm Assistant bot👻",
         description="this bot made by @__xtzzz",
         color=discord.Color.blue())
     embed.add_field(name="「👀」About me",
@@ -213,31 +213,28 @@ async def help(ctx):
     if str(ctx.channel.id) != CHANNEL_ID:
         return await ctx.send("This command is only available in a specific channel.")
 
-    # Create embed messages for each field
-    embed_hi = discord.Embed(title="🧠 Bot Commands 🤖", description="!hi - Greets the user.", color=discord.Color.green())
-    embed_cls = discord.Embed(title="🧠 Bot Commands 🤖", description="!cls [amount] - Clears the specified number of messages.", color=discord.Color.red())
-    embed_ssru = discord.Embed(title="🧠 Bot Commands 🤖", description="!ssru - Information about SSRU", color=discord.Color.blue())
-    embed_coinflip = discord.Embed(title="🧠 Bot Commands 🤖", description="!coinflip - Flip the coin.", color=discord.Color.purple())
-    embed_diceroll = discord.Embed(title="🧠 Bot Commands 🤖", description="!diceroll - Roll the dice.", color=discord.Color.dark_blue())
-    embed_add_homework = discord.Embed(title="🧠 Bot Commands 🤖", description="!add_homework [subject] [work] - Add the homework assignment.", color=discord.Color.dark_green())
-    embed_list_homework = discord.Embed(title="🧠 Bot Commands 🤖", description="!list_homework - List all of the homework.", color=discord.Color.dark_red())
-    embed_remove_homework = discord.Embed(title="🧠 Bot Commands 🤖", description="!remove_homework [subject] [work] - Remove the homework.", color=discord.Color.dark_gold())
-    embed_google = discord.Embed(title="🧠 Bot Commands 🤖", description="!google [anything] - Let it search for you", color=discord.Color.dark_teal())
-    embed_version = discord.Embed(title="🧠 Bot Commands 🤖", description="!version - Information about the bot", color=discord.Color.magenta())
-    embed_help = discord.Embed(title="🧠 Bot Commands 🤖", description="!help - Displays this help message.", color=discord.Color.dark_orange())
+    # Create embed messages for each category of commands
+    embed_commands = discord.Embed(title="🧠 Normal Commands 🤖", color=discord.Color.green())
+    embed_commands.add_field(name="!hi", value="Greets the user.", inline=False)
+    embed_commands.add_field(name="!cls [amount]", value="Clears the specified number of messages.", inline=False)
+    embed_commands.add_field(name="!version", value="Information about the bot", inline=False)
+    embed_commands.add_field(name="!help", value="Displays this dawg message.", inline=False)
+
+    embed_school_commands = discord.Embed(title="🏫 School Commands 🎓", color=discord.Color.blue())
+    embed_school_commands.add_field(name="!ssru", value="Information about SSRU", inline=False)
+    embed_school_commands.add_field(name="!add_homework [subject] [work]", value="Add the homework assignment.", inline=False)
+    embed_school_commands.add_field(name="!list_homework", value="List all of the homework.", inline=False)
+    embed_school_commands.add_field(name="!remove_homework [subject] [work]", value="Remove the homework.", inline=False)
+
+    embed_fun_commands = discord.Embed(title="🎉 Fun Commands 🎲", color=discord.Color.orange())
+    embed_fun_commands.add_field(name="!coinflip", value="Flip the coin.", inline=False)
+    embed_fun_commands.add_field(name="!diceroll", value="Roll the dice.", inline=False)
+    embed_fun_commands.add_field(name="!google [anything]", value="Let it search for you", inline=False)
 
     # Send the embed messages
-    await ctx.send(embed=embed_hi)
-    await ctx.send(embed=embed_cls)
-    await ctx.send(embed=embed_ssru)
-    await ctx.send(embed=embed_coinflip)
-    await ctx.send(embed=embed_diceroll)
-    await ctx.send(embed=embed_add_homework)
-    await ctx.send(embed=embed_list_homework)
-    await ctx.send(embed=embed_remove_homework)
-    await ctx.send(embed=embed_google)
-    await ctx.send(embed=embed_version)
-    await ctx.send(embed=embed_help)
+    await ctx.send(embed=embed_commands)
+    await ctx.send(embed=embed_school_commands)
+    await ctx.send(embed=embed_fun_commands)
 
 
 @bot.command()
