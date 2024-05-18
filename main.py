@@ -146,7 +146,7 @@ async def version(ctx):
   # Create an embed message
   embed = discord.Embed(title="Version 1.2.0",
                       description="this bot made by @__xtzzz",
-                      color=discord.Color.blue())
+                      color=discord.Color.red())
 
   # Send the embed message
   await ctx.send(embed=embed)
@@ -214,12 +214,12 @@ async def help(ctx):
     return
 
   # Create an embed message
-  embed = discord.Embed(title="🕶 Bot Commands 🤖",
+  embed = discord.Embed(title="🧠 Bot Commands 🤖",
                         description="Here are the available commands:",
                         color=discord.Color.blue())
 
   # Add the list of commands
-  embed.add_field(name="!hi", value="Greets the user.", inline=False)
+  embed.add_field(name="!hi", value="Greets the user.", inline=False, color=discord.Color.green())
   embed.add_field(name="!cls [amount]",
                   value="Clears the specified number of messages.",
                   inline=False)
@@ -247,11 +247,7 @@ async def help(ctx):
   embed.add_field(name="!google [anything]",
                   value="let it search for you",
                   inline=False)
-  embed.add_field(name="!play[youtube url]",
-                  value="play the youtube video/music",
-                  inline=False)
-  embed.add_field(name="!stop", value="stop playing video/music", inline=False)
-  embed.add_field(name="!hello",
+  embed.add_field(name="!version",
                   value="Information about the bot",
                   inline=False)
   embed.add_field(name="!help",
@@ -301,37 +297,6 @@ async def google(ctx, query: str):
   await ctx.send(f"Google search for 🔎 '{query}': {google_link}")
 
 
-@bot.command()
-async def play(ctx, url):
-  voice_channel = ctx.author.voice.channel
-  if voice_channel is None:
-    await ctx.send("You need to be in a voice channel to use this command.")
-    return
-
-  voice_client = await voice_channel.connect()
-
-  try:
-    yt = YouTube(url)
-    stream = yt.streams.filter(only_audio=True).first()
-    if not stream:
-      await ctx.send("Error: No audio stream available for this URL.")
-      return
-
-    audio_source = await discord.FFmpegOpusAudio.from_probe(
-        stream.url, executable="ffmpeg")
-    voice_client.play(audio_source)
-    await ctx.send(f"Now playing 🎧: {yt.title}")
-  except Exception as e:
-    await ctx.send(f"Error: {e}")
-
-
-@bot.command()
-async def stop(ctx):
-  voice_client = ctx.voice_client
-  if voice_client is not None:
-    await voice_client.disconnect()
-  else:
-    await ctx.send("I'm not connected to a voice channel.")
 
 # Run the bot
 bot.run(TOKEN)
