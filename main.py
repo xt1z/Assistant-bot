@@ -10,133 +10,91 @@ from discord.ext import commands
 from discord import Activity, ActivityType
 from keep_alive import keep_alive
 keep_alive()
-# Retrieve bot token from environment variable
-TOKEN = os.environ.get('TOKEN')
 
-# Replace 'channel_id_here' with the ID of the channel where you want the bot to respond
+TOKEN = os.environ.get('TOKEN')
 CHANNEL_ID = '1241258662237044777'
 HOMEWORK_ID = '1241258296392945666'
 
-# Define the intents
 intents = discord.Intents.all()
-intents.messages = True  # Enable the messages intent
-
-# Create a bot instance with specified intents and command prefix
+intents.messages = True
 bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
 
-# Define the file path for storing the homework data
 HOMEWORK_FILE = "homework.json"
 
-
-# Function to load homework data from file
 def load_homework():
-  if os.path.exists(HOMEWORK_FILE):
-    with open(HOMEWORK_FILE, "r") as file:
-      return json.load(file)
-  else:
-    return {}
+    if os.path.exists(HOMEWORK_FILE):
+        try:
+            with open(HOMEWORK_FILE, "r") as file:
+                return json.load(file)
+        except json.JSONDecodeError:
+            print("Error: Unable to decode JSON file. Returning empty dictionary.")
+            return {}
+    else:
+        print("Homework file not found. Returning empty dictionary.")
+        return {}
 
-
-# Function to save homework data to file
 def save_homework(data):
-  with open(HOMEWORK_FILE, "w") as file:
-    json.dump(data, file)
+    with open(HOMEWORK_FILE, "w") as file:
+        json.dump(data, file)
 
-
-# Homework tracker dictionary
 homework_tracker = load_homework()
-
 
 @bot.event
 async def on_ready():
-  print(f'We have logged in as {bot.user}')
-  activity = Activity(type=ActivityType.playing,
-                      name="Helping SSRU Community Server")
-  await bot.change_presence(activity=activity)
-
+    print(f'We have logged in as {bot.user}')
+    activity = Activity(type=ActivityType.playing,
+                        name="Helping SSRU Community Server")
+    await bot.change_presence(activity=activity)
 
 @bot.command()
 async def add_homework(ctx, subject: str, *, assignment: str):
-  # Check if the command was sent in the specified channel
-  if str(ctx.channel.id) != HOMEWORK_ID:
-    return
+    if str(ctx.channel.id) != HOMEWORK_ID:
+        return
+    if subject.lower() not in homework_tracker:
+        homework_tracker[subject.lower()] = [assignment]
+    else:
+        homework_tracker[subject.lower()].append(assignment)
 
-  # Add the homework assignment to the tracker
-  if subject.lower() not in homework_tracker:
-    homework_tracker[subject.lower()] = [assignment]
-  else:
-    homework_tracker[subject.lower()].append(assignment)
-
-  await ctx.send(f'Homework assignment added for {subject}: {assignment}')
-
-  # Save the updated homework data
-  save_homework(homework_tracker)
-
+    await ctx.send(f'Homework assignment added for {subject}: {assignment}')
+    save_homework(homework_tracker)
 
 @bot.command()
 async def list_homework(ctx):
-    # Check if the command was sent in the specified channel
     if str(ctx.channel.id) != HOMEWORK_ID:
         return
-
-    # List all homework assignments
     if homework_tracker:
         for subject, assignments in homework_tracker.items():
-            await ctx.send(f'📒**{subject.capitalize()}:**\n\n' +  # Adding an extra line break here
+            await ctx.send(f'📒**{subject.capitalize()}:**\n\n' +
                            '\n'.join(assignments))
     else:
         await ctx.send('No homework assignments tracked.')
 
-
-
 @bot.command()
 async def remove_homework(ctx, subject: str, *, assignment: str):
-  # Check if the command was sent in the specified channel
-  if str(ctx.channel.id) != HOMEWORK_ID:
-    return
-
-  # Remove the specified homework assignment
-  if subject.lower() in homework_tracker and assignment in homework_tracker[
-      subject.lower()]:
-    homework_tracker[subject.lower()].remove(assignment)
-    await ctx.send(f'Homework assignment removed for {subject}: {assignment}')
-
-    # Save the updated homework data
-    save_homework(homework_tracker)
-  else:
-    await ctx.send('Homework assignment not found.')
-
-
-# Make sure to save the homework data when the bot shuts down
-@bot.event
-async def on_disconnect():
-  save_homework(homework_tracker)
-
+    if str(ctx.channel.id) != HOMEWORK_ID:
+        return
+    if subject.lower() in homework_tracker and assignment in homework_tracker[subject.lower()]:
+        homework_tracker[subject.lower()].remove(assignment)
+        await ctx.send(f'Homework assignment removed for {subject}: {assignment}')
+        save_homework(homework_tracker)
+    else:
+        await ctx.send('Homework assignment not found.')
 
 @bot.command()
 async def hi(ctx):
-  # Check if the command was sent in the specified channel
-  if str(ctx.channel.id) != CHANNEL_ID:
-    return
-
-  # Create an embed message
-  embed = discord.Embed(
-      title="Hello I'm the Assistant bot👻",
-      description="this bot made by @__xtzzz",
-      color=discord.Color.blue())
-  embed.set_author(
-      name=ctx.author.name,
-      icon_url=ctx.author.avatar.url)  # Use avatar.url instead of avatar_url
-  embed.add_field(name="「👀」About me",
-                  value="https://xt1z.github.io/araiwa/",
-                  inline=False)
-  embed.add_field(name="「📌」Objective for this bot",
-                  value="help our community",
-                  inline=True)
-  embed.set_footer(text="© 2024 __xtzzz's")
-
-  # Send the embed message
-  await ctx.send(embed=embed)
+    if str(ctx.channel.id) != CHANNEL_ID:
+        return
+    embed = discord.Embed(
+        title="Hello I'm the Assistant bot👻",
+        description="this bot made by @__xtzzz",
+        color=discord.Color.blue())
+    embed.add_field(name="「👀」About me",
+                    value="https://xt1z.github.io/araiwa/",
+                    inline=False)
+    embed.add_field(name="「📌」Objective for this bot",
+                    value="help our community",
+                    inline=True)
+    await ctx.send(embed=embed)
 
 
 @bot.command()
